@@ -20,11 +20,8 @@
 </head>
 <body class="bg-zinc-700 text-white">
     <div class="container mx-auto p-6 max-w-4xl bg-zinc-800 shadow-md rounded-lg items-center text-center">
-        <h1 class="text-3xl font-bold mb-4">System Package Manager</h1>
-
-        
-
-        
+        <h1 class="text-3xl font-bold mb-4 underline">System Package Manager</h1>
+        <br>
         <!-- Update System Section -->
         <h2 class="text-2xl font-semibold mb-2">Update System</h2>
         <button onclick="updateSystem()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Update</button>
@@ -36,6 +33,13 @@
             <!-- Checkboxes will be dynamically inserted here -->
         </div>
         <button onclick="installCheckedPackages()" class="bg-green-500 text-white px-4 py-2 mt-2 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">Install Selected Packages</button>
+        <!-- Input for custom package -->
+        <div class="mt-4">
+            <label for="customPackage" class="text-2xl font-semibold mt-6 mb-2">Custom Package:</label>
+            <input type="text" id="customPackage" placeholder="Enter package name" class="mt-1 block w-full border border-gray-300 rounded p-2 text-black">
+            <button onclick="installCustomPackage()" class="bg-blue-500 text-white px-4 py-2 mt-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Install Custom Package</button>
+        </div>
+        
         <textarea id="installOutput" class="w-full mt-4 p-2 border border-gray-300 rounded text-black" readonly></textarea>
 
         <!-- Remove Packages Section -->

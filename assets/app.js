@@ -9,10 +9,10 @@ function loadAvailablePackages() {
             
             packages.forEach(pkg => {
                 const checkbox = document.createElement('div');
-                checkbox.classList.add('mb-2');
+                checkbox.classList.add('mb-2', 'p-2', 'bg-zinc-800', 'rounded', 'flex', 'items-center');
                 checkbox.innerHTML = `
-                    <input type="checkbox" id="pkg-${pkg}" value="${pkg}" class="mr-2">
-                    <label for="pkg-${pkg}">${pkg}</label>
+                    <input type="checkbox" id="pkg-${pkg}" value="${pkg}" class="mr-2 rounded border-gray-300">
+                    <label for="pkg-${pkg}" class="text-gray-800">${pkg}</label>
                 `;
                 container.appendChild(checkbox);
             });

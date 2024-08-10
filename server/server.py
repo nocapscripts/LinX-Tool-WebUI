@@ -20,8 +20,16 @@ def run_command(command):
 
 @app.route('/packages', methods=['GET'])
 def get_packages():
-    output = run_command("pacman -Qq")
+    # Command to list all available packages
+    command = "pacman -Sl | awk '{print $2}' | sort -u"
+    
+    # Run the command
+    output = run_command(command)
+    
+    # Process the output into a list of packages
     packages = output.splitlines()
+    
+    # Return the packages as a JSON response
     return jsonify({"packages": packages})
 
 @app.route('/update', methods=['POST'])
