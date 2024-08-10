@@ -8,13 +8,24 @@ function loadAvailablePackages() {
             container.innerHTML = ''; // Clear any existing checkboxes
             
             packages.forEach(pkg => {
-                const checkbox = document.createElement('div');
-                checkbox.classList.add('mb-2', 'p-2', 'bg-zinc-800', 'rounded', 'flex', 'items-center');
-                checkbox.innerHTML = `
-                    <input type="checkbox" id="pkg-${pkg}" value="${pkg}" class="mr-2 rounded border-gray-300">
-                    <label for="pkg-${pkg}" class="text-gray-800">${pkg}</label>
-                `;
-                container.appendChild(checkbox);
+                const checkboxWrapper = document.createElement('div');
+                checkboxWrapper.classList.add('flex', 'items-center', 'mb-2', 'p-2', 'rounded', 'shadow-sm', 'text-black');
+                
+                const checkboxInput = document.createElement('input');
+                checkboxInput.type = 'checkbox';
+                checkboxInput.id = `pkg-${pkg}`;
+                checkboxInput.value = pkg;
+                checkboxInput.classList.add('mr-2', 'form-checkbox', 'text-blue-500');
+
+                const checkboxLabel = document.createElement('label');
+                checkboxLabel.htmlFor = `pkg-${pkg}`;
+                checkboxLabel.classList.add('text-lg', 'font-medium');
+                checkboxLabel.textContent = pkg;
+
+                checkboxWrapper.appendChild(checkboxInput);
+                checkboxWrapper.appendChild(checkboxLabel);
+                
+                container.appendChild(checkboxWrapper);
             });
         })
         .catch(error => console.error('Error:', error));
@@ -36,12 +47,30 @@ function installCheckedPackages() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ packages })
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok.');
-        }
-        return response.json();
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('installOutput').value = data.output || 'No output returned.';
     })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('installOutput').value = `Error: ${error.message}`;
+    });
+}
+
+// Function to install a custom package
+function installCustomPackage() {
+    const packageName = document.getElementById('customPackage').value.trim();
+    if (packageName === '') {
+        alert('Please enter a package name.');
+        return;
+    }
+
+    fetch('http://localhost:5000/custom', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ package: packageName })
+    })
+    .then(response => response.json())
     .then(data => {
         document.getElementById('installOutput').value = data.output || 'No output returned.';
     })
@@ -54,18 +83,13 @@ function installCheckedPackages() {
 // Function to update the system
 function updateSystem() {
     fetch('http://localhost:5000/update', { method: 'POST' })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok.');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            document.getElementById('updateOutput').value = data.output || 'No output returned.';
+            document.getElementById('installOutput').value = data.output || 'No output returned.';
         })
         .catch(error => {
             console.error('Error:', error);
-            document.getElementById('updateOutput').value = `Error: ${error.message}`;
+            document.getElementById('installOutput').value = `Error: ${error.message}`;
         });
 }
 
@@ -82,18 +106,13 @@ function removePackages() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ packages })
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok.');
-        }
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
-        document.getElementById('removeOutput').value = data.output || 'No output returned.';
+        document.getElementById('installOutput').value = data.output || 'No output returned.';
     })
     .catch(error => {
         console.error('Error:', error);
-        document.getElementById('removeOutput').value = `Error: ${error.message}`;
+        document.getElementById('installOutput').value = `Error: ${error.message}`;
     });
 }
 
@@ -112,18 +131,13 @@ function uploadFile() {
         method: 'POST',
         body: formData
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok.');
-        }
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
-        document.getElementById('uploadOutput').value = data.output || 'No output returned.';
+        document.getElementById('installOutput').value = data.output || 'No output returned.';
     })
     .catch(error => {
         console.error('Error:', error);
-        document.getElementById('uploadOutput').value = `Error: ${error.message}`;
+        document.getElementById('installOutput').value = `Error: ${error.message}`;
     });
 }
 
