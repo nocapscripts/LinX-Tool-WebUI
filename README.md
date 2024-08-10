@@ -9,6 +9,7 @@ This should be Web UI based linux tool where you can manipulate stuff.
 install-req is the main execution shell
 
 ```
+cd linx-tool-web-ui
 sudo chmod +x *
 sudo ./install-req.sh
 ```
