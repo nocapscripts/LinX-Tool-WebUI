@@ -2,12 +2,10 @@
 
 set -e
 
-# Function to check if a command exists
 command_exists() {
     command -v "$1" &> /dev/null
 }
 
-# Function to install project dependencies
 install_dependencies() {
     echo "Installing project dependencies..."
     if command_exists yarn; then
@@ -22,7 +20,6 @@ install_dependencies() {
     fi
 }
 
-# Function to install Node.js and npm on Debian-based systems
 install_nodejs_npm_debian() {
     if ! command_exists node || ! command_exists npm; then
         echo "Updating package list..."
@@ -41,7 +38,6 @@ install_nodejs_npm_debian() {
     fi
 }
 
-# Function to install Node.js, npm, and yarn on Arch-based systems
 install_nodejs_npm_arch() {
     if ! command_exists node || ! command_exists npm || ! command_exists yarn; then
         echo "Updating package list..."
@@ -66,7 +62,6 @@ install_nodejs_npm_arch() {
     fi
 }
 
-# Function to install http-server globally
 install_http_server() {
     if ! npm list -g | grep -q http-server; then
         echo "Installing http-server globally..."
@@ -79,13 +74,33 @@ install_http_server() {
     fi
 }
 
-# Function to start the server
 start_server() {
     echo "Starting server..."
     sudo ./run.sh
 }
 
-# Detect the distribution and install Node.js, npm, and dependencies accordingly
+update_gitignore() {
+    echo "Updating .gitignore..."
+    
+    # Check if .gitignore file exists
+    if [ -f .gitignore ]; then
+        echo ".gitignore file exists. Checking for node_modules entry..."
+    else
+        echo ".gitignore file does not exist. Creating new .gitignore file..."
+        touch .gitignore
+    fi
+
+    # Check if node_modules is already in .gitignore
+    if ! grep -q '^node_modules$' .gitignore; then
+        echo "Adding node_modules to .gitignore..."
+        echo "node_modules" >> .gitignore
+        echo ".gitignore updated with node_modules"
+    else
+        echo "node_modules is already in .gitignore"
+    fi
+}
+
+
 if [ -f /etc/debian_version ]; then
     echo "Detected Debian-based system"
     install_nodejs_npm_debian
@@ -97,13 +112,12 @@ else
     exit 1
 fi
 
-# Install project dependencies
 install_dependencies
 
-# Install http-server
 install_http_server
 
-# Start the server
 start_server 
+
+update_gitignore
 
 echo "Installation complete."
