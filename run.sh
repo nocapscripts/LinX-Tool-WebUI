@@ -28,13 +28,13 @@ kill_process() {
 # source /path/to/venv/bin/activate
 
 # Check if Flask server is already running and stop it
-if is_process_running "python3 ./server.py"; then
+if is_process_running "python3 ./server/server.py"; then
     echo "Flask server is already running. Stopping it..."
-    kill_process "python3 ./server.py"
+    kill_process "python3 ./server/server.py"
 fi
 
 echo "Starting Flask server..."
-sudo python3 ./server.py &
+sudo python3 ./server/server.py &
 
 # Ensure `http-server` is installed
 if ! command -v http-server &> /dev/null
